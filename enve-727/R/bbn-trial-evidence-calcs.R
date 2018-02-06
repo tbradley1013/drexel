@@ -5,6 +5,16 @@
 # 2018-02-06
 #==============================================================================
 
+# This function will take the prior probability that each of the 
+# three possible suspects (X, J, and O (other)) are guilty as a named 
+# list `p` when the names are X, J, and O respectively.
+# Additionally, it will take the likelihood, `l`, that a given piece of 
+# evidence is true given that a given suspect is guilty. This 
+# should also be given as a named list with the same names 
+# (X, J, O) as p. 
+# This will return a named list by the same convention 
+# with the posterior probabilites of guilt for each of the three
+# suspects
 update_prior <- function(p, l){
   pX_update <- (p$X*l$X)/(p$X * l$X + p$J * l$J + p$O * l$O)
   pJ_update <- (p$J*l$J)/(p$X * l$X + p$J * l$J + p$O * l$O)
@@ -19,7 +29,16 @@ update_prior <- function(p, l){
   return(output)
 }
 
-
+# This function will take the prior probability that each of the 
+# three possible suspects (X, J, and O (other)) are guilty as a named 
+# list `p` when the names are X, J, and O respectively.
+# Additionally, it will take the likelihood, `l`, that a given piece of 
+# evidence is true given that a given suspect is guilty. This 
+# should also be given as a named list with the same names 
+# (X, J, O) as p. 
+# This will return a named list by the same convention 
+# with the diagnostic benefit for the given piece of evidence 
+# on the probability of guilt for each suspect
 diag_ben <- function(p, l){
   dbX <- (l$X)/((p$J*l$J + p$O*l$O)/(1-p$X))
   dbJ <- (l$J)/((p$X*l$X + p$O*l$O)/(1-p$J))
