@@ -60,5 +60,46 @@ ask_ride <- list(X = 0.5, J = 0.05, O = 0.05)
 p_post1 <- update_prior(p = p_prior, l = lent_car)
 db1 <- diag_ben(p = p_prior, l = lent_car)
 
+p_post1
+# $X
+# [1] 0.3533569
+# 
+# $J
+# [1] 0.01766784
+# 
+# $O
+# [1] 0.6289753
+
+db1
+# $X
+# [1] 4.918033
+# 
+# $J
+# [1] 1.780576
+# 
+# $O
+# [1] 0.2095238
+
 p_post2 <- update_prior(p = p_post1, l = ask_ride)
-diag_ben(p = p_post1, l = ask_ride)
+db2 <- diag_ben(p = p_post1, l = ask_ride)
+
+
+p_post2
+# $X
+# [1] 0.8453085
+# 
+# $J
+# [1] 0.004226543
+# 
+# $O
+# [1] 0.1504649
+
+db2
+# $X
+# [1] 10
+# 
+# $J
+# [1] 0.2359932
+# 
+# $O
+# [1] 0.1044776
