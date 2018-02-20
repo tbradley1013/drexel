@@ -67,7 +67,7 @@ diag_ben <- function(p, l){
 
 Since the values included for both the initial prior and all of the likelihoods of evidence are given as probabilities between 0 and 1, the `rbeta` function was used to generate random numbers from the beta distribution. 
 
-```{r cdf-value-setup}
+```{r cdf-func-setup}
 probs <- tibble::tribble(
   ~X, ~J, ~O, ~perc, ~key,
   0.2, 0.1, 0.7, 0.5, "prior",
@@ -99,7 +99,7 @@ ecdf_func <- function(x, y, p){
   )
 }
 
-ecdf_func(test, test_perc, c(10, 5))
+ecdf_func(test, test_perc, c(10.75, 42.02))
 
 nlm(ecdf_func, p = c(0.2, 0.1), x = test, y = test_perc)$estimate
 ```
@@ -169,62 +169,66 @@ monte_unnested <- monte_carlo_sims %>%
 
 ```
 
+```{r view-sims}
+sims <- monte_carlo_sims %>% 
+  gather(key = key, value = output) %>% 
+  filter(!str_detect(key, "post")) %>% 
+  unnest(output) %>% 
+  gather(key = person, value = prob, J:X)
+
+sims_sum <- sims %>% 
+  group_by(key, person) %>% 
+  summarize(
+    fifth = quantile(prob, 0.05),
+    median = median(prob),
+    ninefive = quantile(prob, 0.95)
+  )
+
+
+sims %>% 
+  mutate(person = factor(person, levels = c("X", "J", "O")),
+         key = factor(key, 
+                      levels = c("prior", "lent_car",
+                                 "ask_ride", "smoked",
+                                 "j_confessed", "call_x_friend"),
+                      labels = c("Prior Probability",
+                                 "X lent car to J",
+                                 "X asked victim for ride",
+                                 "X smoked and acted nervous",
+                                 "J confessed to X killing victim",
+                                 "X's phone used to call person only known by X"))) %>% 
+  ggplot(aes(prob, person, fill = person)) + 
+  facet_wrap(~key) + 
+  ggridges::geom_density_ridges2() +
+  theme_bw()
+```
+
+
 ```{r view-dists}
 monte_unnested %>% 
-  ggplot(aes(prob, person)) + 
+  mutate(person = factor(person, levels = c("X", "J", "O")),
+         key = factor(key, 
+                      levels = c("prior", "post_1", "post_2",
+                                 "post_3", "post_4", "post_5"),
+                      labels = c("Prior probability",
+                                 "Prob[lent car|suspect]",
+                                 "Prob[asked for ride|suspect]",
+                                 "Prob[smoked|suspect]",
+                                 "Prob[J accussed X|suspect]",
+                                 "Prob[call to X friend|suspect]"))) %>% 
+  ggplot(aes(prob, person, fill = person)) + 
   facet_wrap(~ key) + 
   # geom_density(stat = "count")
-  ggridges::geom_density_ridges2()
+  ggridges::geom_density_ridges2() +
+  theme_bw() +
+  labs(y = "Suspect",
+       x = "Probability",
+       title = "Posterior probability distributions from Monte Carlo simulation after\nBaye's Rule is applied for each piece of evidence",
+       subtitle = "Posterior estimates are based on assumption that all pieces of evidence prior are true",
+       caption = "10,000 random samples from fit beta distributions were used to create prior distribution and each liklihood distribution\nbeta distributions were fit using a minimization optimizer to fit data to an empirical CDF") +
+  scale_fill_discrete(name = "Suspect")
 
 ```
 
 
-```{r adding-data}
-prior <- list(X = 0.1, J = 0.01, O = 0.89)
-lent_car <- list(X = 0.15, J = 0.2, O = 0.05)
-ask_ride <- list(X = 0.2, J = 0.05, O = 0.01)
-smoked <- list(X = 0.3, J = 0.05, 0.01)
-j_confessed <- list(X = 0.6, J = 0.1, O = 0.01)
-call_x_friend <- list(X = 0.1, J = 0.05, O = 0.01)
-
-tibble(x = 1) %>% 
-  mutate(prior = map(x, ~prior),
-         lent_car = map(x, ~lent_car),
-         ask_ride = map(x, ~ ask_ride),
-         smoked = map(x, ~smoked),
-         j_confessed = map(x, ~j_confessed),
-         call_x_friend = map(x, ~call_x_friend)) %>% 
-  select(-x) %>% 
-  gather(key = key, value = probs, prior:call_x_friend) %>% 
-  mutate(
-    shape = map2(
-      probs,
-      function(x) {
-        map(x, function(x){
-          if (x == 0.1){
-            alpha <- 20,
-            beta <- 160
-          } else if (x == 0.01) {
-            alpha <- 1, 
-            beta <- 0.99
-          } else if (x == 0.89) {
-            alpha <- 30
-            beta <- 5
-          } else if (x == 0.15) {
-            alpha <- 20
-            beta <- 113
-          } 
-        })
-      }
-    ),
-    sims = map(
-      shape, 
-      function(x){
-        map(x, ~rbeta(1000, .x$alpha, .x$beta))
-      }
-    )
-  
-  ) %>% 
-  pull(sims)
-```
 
