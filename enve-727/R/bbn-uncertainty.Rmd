@@ -31,7 +31,7 @@ update_prior <- function(p, l){
   pJ_update <- (p$J*l$J)/(p$X * l$X + p$J * l$J + p$O * l$O)
   pO_update <- (p$O*l$O)/(p$X * l$X + p$J * l$J + p$O * l$O)
   
-  output <- list(
+  output <- tibble(
     X = pX_update,
     J = pJ_update,
     O = pO_update
@@ -55,7 +55,7 @@ diag_ben <- function(p, l){
   dbJ <- (l$J)/((p$X*l$X + p$O*l$O)/(1-p$J))
   dbO <- (l$O)/((p$X*l$X + p$J*l$J)/(1-p$O))
   
-  output <- list(
+  output <- tibble(
     X = dbX,
     J = dbJ, 
     O = dbO
@@ -67,39 +67,97 @@ diag_ben <- function(p, l){
 
 Since the values included for both the initial prior and all of the likelihoods of evidence are given as probabilities between 0 and 1, the `rbeta` function was used to generate random numbers from the beta distribution. 
 
-```{r optim-funcs}
-est_beta_params <- function(mu, var) {
-  alpha <- ((1 - mu) / var - 1 / mu) * mu ^ 2
-  beta <- alpha * (1 / mu - 1)
-  params = list(alpha = alpha, beta = beta)
-  
-  return(params)
+```{r cdf-value-setup}
+probs <- tibble::tribble(
+  ~X, ~J, ~O, ~perc, ~key,
+  0.2, 0.1, 0.7, 0.5, "prior",
+  0.05, 0.01, 0.5, 0.05, "prior",
+  0.3, 0.2, 0.94, 0.95, "prior",
+  0.15, 0.1, 0.05, 0.5, "lent_car",
+  0.05, 0.01, 0.005, 0.05, "lent_car",
+  0.3, 0.2, 0.1, 0.95, "lent_car",
+  0.2, 0.05, 0.01, 0.5, "ask_ride",
+  0.1, 0.01, 0.005, 0.05, "ask_ride",
+  0.3, 0.15, 0.1, 0.95, "ask_ride",
+  0.2, 0.05, 0.01, 0.5, "smoked",
+  0.05, 0.005, 0.005, 0.05, "smoked",
+  0.3, 0.15, 0.1, 0.95, "smoked",
+  0.7, 0.35, 0.01, 0.5, "j_confessed",
+  0.5, 0.2, 0.005, 0.05, "j_confessed",
+  0.85, 0.6, 0.1, 0.95, "j_confessed",
+  0.1, 0.05, 0.01, 0.5, "call_x_friend",
+  0.05, 0.01, 0.005, 0.05, "call_x_friend",
+  0.15, 0.1, 0.05, 0.95, "call_x_friend"
+)
+
+test <- c(0.2, 0.05, .3)
+test_perc <- c(0.5, 0.05, 0.95)
+
+ecdf_func <- function(x, y, p){
+  sum(
+    (y - pbeta(x, p[[1]], p[[2]]))^2
+  )
 }
 
-para <- est_beta_params(0.4, 0.4)
+ecdf_func(test, test_perc, c(10, 5))
 
+nlm(ecdf_func, p = c(0.2, 0.1), x = test, y = test_perc)$estimate
+```
 
-rbeta(1000, 0.1, 100) %>% as_tibble() %>% ggplot(aes(value)) + geom_density()
-
-
-mode = 0.82
-sd = 0.1
-# Here are the corresponding rate and shape parameter values:
-ra = ( mode + sqrt( mode^2 + 4*sd^2 ) ) / ( 2 * sd^2 )
-sh = 1 + mode * ra
-show(sh)
-show(ra)
-
-
-min_func <- function(x, p){
-  mean_x <- p[[1]]/(p[[1]] + p[[2]])
+```{r cdf-value}
+monte_carlo_sims <- probs %>% 
+  gather(key = person, value = prob, X:O) %>% 
+  group_by(key, person) %>% 
+  nest() %>% 
+  mutate(
+    ecdf_est = map(
+      data, 
+      ~suppressWarnings(nlm(ecdf_func, p = c(5, 10), x = .x$prob, y = .x$perc)$estimate)
+    ), 
+    sim_data = map(
+      ecdf_est, 
+      ~rbeta(10000, .x[[1]], .x[[2]]) %>% as_tibble()
+    )
+  ) %>% 
+  unnest(sim_data, .drop = TRUE) %>% 
+  # rownames_to_column() %>% 
+  group_by(key, person) %>% 
+  mutate(id = row_number()) %>%  
+  ungroup() %>% 
+  spread(key = person, value = value) %>% 
+  group_by(key) %>% 
+  nest() %>% 
+  ungroup() %>% 
+  spread(key = key, value = data) %>% 
+  mutate(
+    post_1 = map2(
+      prior,
+      lent_car,
+      ~update_prior(.x, .y)
+    ),
+    post_2 = map2(
+      post_1, 
+      ask_ride,
+      ~update_prior(.x, .y)
+    ),
+    post_3 = map2(
+      post_2, 
+      smoked, 
+      ~update_prior(.x, .y)
+    ),
+    post_4 = map2(
+      post_3,
+      j_confessed,
+      ~update_prior(.x, .y)
+    ),
+    post_5 = map2(
+      post_4,
+      call_x_friend,
+      ~update_prior(.x, .y)
+    )
+  ) 
   
-  return(abs(x - mean_x))
-}
 
-out <- nlm(min_func, p = c(75, 100), x = 0.2)
-
-rbeta(1000, out$estimate[[1]], out$estimate[[2]]) %>% as_tibble() %>% ggplot(aes(value)) + geom_density()
 ```
 
 
@@ -137,7 +195,7 @@ tibble(x = 1) %>%
           } else if (x == 0.15) {
             alpha <- 20
             beta <- 113
-          } else if (x == )
+          } 
         })
       }
     ),
