@@ -160,6 +160,24 @@ monte_carlo_sims <- probs %>%
 
 ```
 
+```{r monte-analysis}
+monte_unnested <- monte_carlo_sims %>% 
+  gather(key = key, value = output) %>% 
+  filter(str_detect(key, "prior|post")) %>% 
+  unnest(output) %>% 
+  gather(key = person, value = prob, J:X) 
+
+```
+
+```{r view-dists}
+monte_unnested %>% 
+  ggplot(aes(prob, person)) + 
+  facet_wrap(~ key) + 
+  # geom_density(stat = "count")
+  ggridges::geom_density_ridges2()
+
+```
+
 
 ```{r adding-data}
 prior <- list(X = 0.1, J = 0.01, O = 0.89)
