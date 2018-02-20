@@ -1,0 +1,154 @@
+---
+title: "ENVE 727 Term Project: Critical Thinking about Evidence (Bayesian Belief Networks)"
+output: html_notebook
+---
+
+This report summarizes the uncertainty analysis that was performed to assess the calculations that were made for the ENVE 727 Term Project: Critical thinking about evidence. 
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.height = 6,
+                      fig.width = 10)
+```
+
+```{r load-libraries}
+library(tidyverse)
+
+```
+
+```{r define-functions}
+# This function will take the prior probability that each of the 
+# three possible suspects (X, J, and O (other)) are guilty as a named 
+# list `p` when the names are X, J, and O respectively.
+# Additionally, it will take the likelihood, `l`, that a given piece of 
+# evidence is true given that a given suspect is guilty. This 
+# should also be given as a named list with the same names 
+# (X, J, O) as p. 
+# This will return a named list by the same convention 
+# with the posterior probabilites of guilt for each of the three
+# suspects
+update_prior <- function(p, l){
+  pX_update <- (p$X*l$X)/(p$X * l$X + p$J * l$J + p$O * l$O)
+  pJ_update <- (p$J*l$J)/(p$X * l$X + p$J * l$J + p$O * l$O)
+  pO_update <- (p$O*l$O)/(p$X * l$X + p$J * l$J + p$O * l$O)
+  
+  output <- list(
+    X = pX_update,
+    J = pJ_update,
+    O = pO_update
+  )
+  
+  return(output)
+}
+
+# This function will take the prior probability that each of the 
+# three possible suspects (X, J, and O (other)) are guilty as a named 
+# list `p` when the names are X, J, and O respectively.
+# Additionally, it will take the likelihood, `l`, that a given piece of 
+# evidence is true given that a given suspect is guilty. This 
+# should also be given as a named list with the same names 
+# (X, J, O) as p. 
+# This will return a named list by the same convention 
+# with the diagnostic benefit for the given piece of evidence 
+# on the probability of guilt for each suspect
+diag_ben <- function(p, l){
+  dbX <- (l$X)/((p$J*l$J + p$O*l$O)/(1-p$X))
+  dbJ <- (l$J)/((p$X*l$X + p$O*l$O)/(1-p$J))
+  dbO <- (l$O)/((p$X*l$X + p$J*l$J)/(1-p$O))
+  
+  output <- list(
+    X = dbX,
+    J = dbJ, 
+    O = dbO
+  )
+  
+  return(output)
+}
+```
+
+Since the values included for both the initial prior and all of the likelihoods of evidence are given as probabilities between 0 and 1, the `rbeta` function was used to generate random numbers from the beta distribution. 
+
+```{r optim-funcs}
+est_beta_params <- function(mu, var) {
+  alpha <- ((1 - mu) / var - 1 / mu) * mu ^ 2
+  beta <- alpha * (1 / mu - 1)
+  params = list(alpha = alpha, beta = beta)
+  
+  return(params)
+}
+
+para <- est_beta_params(0.4, 0.4)
+
+
+rbeta(1000, 0.1, 100) %>% as_tibble() %>% ggplot(aes(value)) + geom_density()
+
+
+mode = 0.82
+sd = 0.1
+# Here are the corresponding rate and shape parameter values:
+ra = ( mode + sqrt( mode^2 + 4*sd^2 ) ) / ( 2 * sd^2 )
+sh = 1 + mode * ra
+show(sh)
+show(ra)
+
+
+min_func <- function(x, p){
+  mean_x <- p[[1]]/(p[[1]] + p[[2]])
+  
+  return(abs(x - mean_x))
+}
+
+out <- nlm(min_func, p = c(75, 100), x = 0.2)
+
+rbeta(1000, out$estimate[[1]], out$estimate[[2]]) %>% as_tibble() %>% ggplot(aes(value)) + geom_density()
+```
+
+
+```{r adding-data}
+prior <- list(X = 0.1, J = 0.01, O = 0.89)
+lent_car <- list(X = 0.15, J = 0.2, O = 0.05)
+ask_ride <- list(X = 0.2, J = 0.05, O = 0.01)
+smoked <- list(X = 0.3, J = 0.05, 0.01)
+j_confessed <- list(X = 0.6, J = 0.1, O = 0.01)
+call_x_friend <- list(X = 0.1, J = 0.05, O = 0.01)
+
+tibble(x = 1) %>% 
+  mutate(prior = map(x, ~prior),
+         lent_car = map(x, ~lent_car),
+         ask_ride = map(x, ~ ask_ride),
+         smoked = map(x, ~smoked),
+         j_confessed = map(x, ~j_confessed),
+         call_x_friend = map(x, ~call_x_friend)) %>% 
+  select(-x) %>% 
+  gather(key = key, value = probs, prior:call_x_friend) %>% 
+  mutate(
+    shape = map2(
+      probs,
+      function(x) {
+        map(x, function(x){
+          if (x == 0.1){
+            alpha <- 20,
+            beta <- 160
+          } else if (x == 0.01) {
+            alpha <- 1, 
+            beta <- 0.99
+          } else if (x == 0.89) {
+            alpha <- 30
+            beta <- 5
+          } else if (x == 0.15) {
+            alpha <- 20
+            beta <- 113
+          } else if (x == )
+        })
+      }
+    ),
+    sims = map(
+      shape, 
+      function(x){
+        map(x, ~rbeta(1000, .x$alpha, .x$beta))
+      }
+    )
+  
+  ) %>% 
+  pull(sims)
+```
+

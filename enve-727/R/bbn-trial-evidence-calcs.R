@@ -53,8 +53,8 @@ diag_ben <- function(p, l){
   return(output)
 }
 
-p_prior <- list(X = 0.1, J = 0.01, O = 0.89)
-lent_car <- list(X = 0.1, J = 0.05, O = 0.02)
+p_prior <- list(X = c(0.1, 0.15), J = c(0.01, 0.05), O = c(0.89, 0.8))
+lent_car <- list(X = c(0.1, 0.08), J = c(0.05, 0.06), O = c(0.02, 0.04))
 ask_ride <- list(X = 0.5, J = 0.05, O = 0.05)
 
 p_post1 <- update_prior(p = p_prior, l = lent_car)
