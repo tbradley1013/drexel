@@ -7,7 +7,7 @@
 library(tidyverse)
 
 #' ##Probelm #4
-#' Find k and n from the equation q = k*C^n, given the follwoing data
+#' Find k and n from the equation q = k*C^n^, given the follwoing data
 data <- tribble(
   ~c, ~q,
   1.9, 6.2,
@@ -32,9 +32,6 @@ model$estimate[[2]]
 
 #' ##Problem #6
 #' find k (and units)
-
-n <- 1.3
-
 data_6 <- tribble(
   ~t, ~Ca,
   0, 10, 
@@ -48,6 +45,9 @@ data_6 <- tribble(
 
 
 #' Plotting zero, first, and second order relationships between Ca and t
+#' as Ca vs t, ln(Ca) vs t, and (1/Ca) vs t, respectively.
+#' Since the first order model is the closest to linear, I will you this
+#' for the reaction term. 
 data_6 %>% 
   gather(key = order, value = value, Ca:Ca_inv) %>% 
   mutate(order = factor(order, levels = c("Ca", "ln_Ca", "Ca_inv"),
@@ -57,7 +57,7 @@ data_6 %>%
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
   theme_bw()
-#' 
-lm(ln_Ca ~ t, data = data_6) %>% 
-  broom::tidy()
+
+#' k is given by the slope of the linear model
+lm(ln_Ca ~ t, data = data_6)$coefficients[[2]]
 
