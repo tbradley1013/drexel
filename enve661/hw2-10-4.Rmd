@@ -1,0 +1,90 @@
+---
+title: "ENVE 661 HW2 Problem 10-4"
+author: "Tyler Bradley"
+date: "April 25, 2018"
+output: pdf_document
+---
+
+This document is the work and the results for problem 10-4 of homework assignment #2 in ENVE 661.
+
+First, the required libraries were loaded and the dataset from the data given in example 10-3 in the textbook was created. 
+
+```{r setup, warning = FALSE, message=FALSE}
+# load required libraries
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+```
+
+```{r create-datasets}
+# creating the influent dataset
+influent_data <- tibble::tribble(
+  ~avg_Vs, ~count_inf_part,
+  0.2, 511,
+  0.6, 657, 
+  1.0, 876, 
+  1.4, 1168,
+  1.8, 1460, 
+  2.2, 1314, 
+  2.6, 657,
+  3.0, 438,
+  3.4, 292,
+  3.8, 292
+) %>% 
+  nest()
+
+# creating vector of different settling velocities
+Vc <- seq(0.5, 4.0, by = 0.5)
+
+# combining the influent data for each of the critical velocities
+influent_data <- crossing(Vc, influent_data)
+```
+
+Next, the fraction of particles removed and the count of particles removed were calculated for each avg settling velocity at each of the critical velocities.
+
+```{r calculate-frac-removed}
+# calculating the fraction removed and the count of particles removed
+# for each settling velocity at each of the eight critical velocities
+removal_data <-  influent_data %>% 
+  mutate(
+    data = map2(Vc, data, ~{
+      .y %>% 
+        mutate(frac_removed = avg_Vs/.x,
+               frac_removed = if_else(frac_removed > 1, 1, frac_removed),
+               count_removed = frac_removed*count_inf_part)
+    })
+  ) %>% 
+  unnest(data)
+
+knitr::kable(removal_data, format = "latex", booktabs = TRUE, longtable = TRUE) %>% 
+  collapse_rows(columns = 1, latex_hline = "major")
+```
+
+Finally the removal effeciency for each of the critical veolocities was caluclated.
+
+```{r removal-eff}
+#' calculating the removal effeciency for each of the eight critical 
+#' velocities
+removal_eff <- removal_data  %>%  
+  group_by(Vc) %>% 
+  summarize(removal_eff = sum(count_removed)/sum(count_inf_part))
+
+knitr::kable(removal_eff, format = "latex", booktabs = TRUE)
+```
+
+
+```{r}
+removal_eff %>% 
+  ggplot(aes(Vc, removal_eff)) + 
+  geom_point() + 
+  geom_line() + 
+  labs(
+    title = "Removal effeciency as a function of overflow rate (critical velocity)",
+    x = "Overflow rate (critical velocity) [=] m/h",
+    y = "Removal effeciency"
+  ) +
+  theme_bw()
+
+```
+
+The overflow rate required to achieve **75% removal effeciency** is **2 m/h**. The corresponding $\tau$ if the depth of the basin is 4 m is $$\tau = \frac{depth}{v_c} = \frac{4 m}{2\frac{m}{h}} = 2 h$$
