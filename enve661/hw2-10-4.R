@@ -58,3 +58,4 @@ removal_eff %>%
     y = "Removal effeciency"
   ) +
   theme_bw()
+
