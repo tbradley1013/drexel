@@ -33,7 +33,7 @@ output: html_document
     
   * Water treatment foesnt remove these compounds from water
   * They are very inert, don't react, and are called "forever chemicals"
-  * The chemicals have a three year half life. 
+  * The chemicals have a three year half life *in the human body* (i.e. the time to excrete it). 
   
   
 ## Damages
