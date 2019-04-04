@@ -1,0 +1,57 @@
+---
+title: "ENVE 665 - Hazardous Waste and Groundwater Remediation Notes"
+author: "Tyler Bradley"
+date: "4/4/2019"
+output: html_document
+---
+
+# Lecture 1 (4/4/2019) - Perfluoroinated Compounds
+
+## Intro
+  * Not a "yesterday" issue, it is a "today" issue
+  * USEPA has established the health advisory levels for PFOA and PFAS at 70 ppt of combined Pf
+  * PFOA and PFOS found in >90% of human blood around the world
+  * found everywhere in the environment
+  
+    * Water 
+    
+      * surface and ground water
+    
+    * Landfill leachates
+    * Consumer products (i.e. clothes, automobiles, carpets)
+    * food
+    
+    * We will mainly focus on water and landfill leachates
+  
+  * The relevance in grounwater is mainly from firefighting operations
+  * PFCs were designed to be non-reactive even at over 1000 \degC and are designed to be highly soluble in water
+  * Litigation has focused on PFOA and PFOS but there are 1000s of potential compounds (~5000)
+  * PFOA and PROS are both 8 carbon compounds 
+  
+    * They are the backbone compounds for the PFCs
+    * To get the other contaminants, more carbon and fluoride ions are added onto these compounds
+    
+  * Water treatment foesnt remove these compounds from water
+  * They are very inert, don't react, and are called "forever chemicals"
+  * The chemicals have a three year half life. 
+  
+  
+## Damages
+  
+  * Currently between 215 and 1500 impacted facilities that may have PFCs
+  * New Jersey places regulatory level of 12 ppt as an MCL
+  * Cost analysis 
+    
+    * **sampling and analysis** alone will cost millions of dollars
+    * **Captial cost** To install GAC at these facilites could cost roughly 294M-2B dollars for 215-1500 facilites
+    * **Operations and Maintenance** can cost in the hundreds of millions a year for this number of facilites
+    
+  * The main expected health issues are developmental diseases
+  
+    * The chemicals pass the placenta and are passed onto children from their mothers
+    * They are biochemically active
+    * They can minic portions of the male reproductive system and can cause issues (i.e. it is an active agent in the male testoterone systems which effects development)
+    * It is potentially a carcinogenic
+    * It is potentially harmful at three orders of magnitude lower than previously expected
+    * There are not solid answers, but significant bioaccumulation occurs in the liver, even though it is processed by the kidney. They are stored in blood and not in fat cells 
+    
