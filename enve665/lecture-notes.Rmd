@@ -55,3 +55,28 @@ output: html_document
     * It is potentially harmful at three orders of magnitude lower than previously expected
     * There are not solid answers, but significant bioaccumulation occurs in the liver, even though it is processed by the kidney. They are stored in blood and not in fat cells 
     
+    
+# Levture 4ish - 4/16/2019
+
+* LNAPL - Less-dense non-aqueaous phase liquids
+* DNAPL - Dense non-aqueous phase liquids
+
+Leaks or other contamination sources can permeate through the VADOSE (sp?) ZONE (the area in teh ground between the surface and th ewater table) down to the groundwater. The method for the infiltration depends on the contaminant and its aquesous properties.
+
+Remedial techniques can include micorbiological methods and chemical methods
+
+LNAPL are substances taht will stay at the top of the water table while DNAPL contaminants will "sink" to the bottom of the water table zone (i.e. to the bedrock).
+
+
+Once these LNAPL and DNAPL substances are in the groundwater, they MOVE. This transport of the contaminants is what makes them potentially consequential to downstream communities that use the ground water as a potable source. 
+
+
+-----------------------------------------------------  Surface
+    |                                  ___
+    |                                  \ /
+- - - - - - - - - - - - - - - - - - - - - - - - - - -  Water table 
+    
+
+-----------------------------------------------------  Bedrock
+
+
