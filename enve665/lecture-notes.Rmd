@@ -56,7 +56,7 @@ output: html_document
     * There are not solid answers, but significant bioaccumulation occurs in the liver, even though it is processed by the kidney. They are stored in blood and not in fat cells 
     
     
-# Levture 4ish - 4/16/2019
+# Lecture 5 - 4/16/2019
 
 * LNAPL - Less-dense non-aqueaous phase liquids
 * DNAPL - Dense non-aqueous phase liquids
@@ -79,4 +79,16 @@ Once these LNAPL and DNAPL substances are in the groundwater, they MOVE. This tr
 
 -----------------------------------------------------  Bedrock
 
+
+# Lecture 6 - 4/18/2019
+
+Coal Ash - Contains both organic and inorganic wastes. Two of the most important contaminants is Uranium and Thorium. 
+
+Coal Ash could potentially be creating a Radon gas emission when they decompose.
+
+Polonium is one of the major concerns. It is the breakdown product of Radon. 
+
+Every coal fired power plant in the world has large amounts of coal ash. Historically it was not regulated but now it is included under RCRA subtitle D. The coal ash is highly concentrated with readioactive contaminants since that is the nature of combustion products. When radioactive contaminatns sit there, they decay. This creates Radon gas which is very mobile. This further decays into Polonium which is extremely toxic. The Polonium further degrades into Lead. 
+
+This is another emergning issue in groundwater remediation. 
 
