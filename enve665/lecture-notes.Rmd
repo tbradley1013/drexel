@@ -1,0 +1,94 @@
+---
+title: "ENVE 665 - Hazardous Waste and Groundwater Remediation Notes"
+author: "Tyler Bradley"
+date: "4/4/2019"
+output: html_document
+---
+
+# Lecture 1 (4/4/2019) - Perfluoroinated Compounds
+
+## Intro
+  * Not a "yesterday" issue, it is a "today" issue
+  * USEPA has established the health advisory levels for PFOA and PFAS at 70 ppt of combined Pf
+  * PFOA and PFOS found in >90% of human blood around the world
+  * found everywhere in the environment
+  
+    * Water 
+    
+      * surface and ground water
+    
+    * Landfill leachates
+    * Consumer products (i.e. clothes, automobiles, carpets)
+    * food
+    
+    * We will mainly focus on water and landfill leachates
+  
+  * The relevance in grounwater is mainly from firefighting operations
+  * PFCs were designed to be non-reactive even at over 1000 \degC and are designed to be highly soluble in water
+  * Litigation has focused on PFOA and PFOS but there are 1000s of potential compounds (~5000)
+  * PFOA and PROS are both 8 carbon compounds 
+  
+    * They are the backbone compounds for the PFCs
+    * To get the other contaminants, more carbon and fluoride ions are added onto these compounds
+    
+  * Water treatment foesnt remove these compounds from water
+  * They are very inert, don't react, and are called "forever chemicals"
+  * The chemicals have a three year half life *in the human body* (i.e. the time to excrete it). 
+  
+  
+## Damages
+  
+  * Currently between 215 and 1500 impacted facilities that may have PFCs
+  * New Jersey places regulatory level of 12 ppt as an MCL
+  * Cost analysis 
+    
+    * **sampling and analysis** alone will cost millions of dollars
+    * **Captial cost** To install GAC at these facilites could cost roughly 294M-2B dollars for 215-1500 facilites
+    * **Operations and Maintenance** can cost in the hundreds of millions a year for this number of facilites
+    
+  * The main expected health issues are developmental diseases
+  
+    * The chemicals pass the placenta and are passed onto children from their mothers
+    * They are biochemically active
+    * They can minic portions of the male reproductive system and can cause issues (i.e. it is an active agent in the male testoterone systems which effects development)
+    * It is potentially a carcinogenic
+    * It is potentially harmful at three orders of magnitude lower than previously expected
+    * There are not solid answers, but significant bioaccumulation occurs in the liver, even though it is processed by the kidney. They are stored in blood and not in fat cells 
+    
+    
+# Lecture 5 - 4/16/2019
+
+* LNAPL - Less-dense non-aqueaous phase liquids
+* DNAPL - Dense non-aqueous phase liquids
+
+Leaks or other contamination sources can permeate through the VADOSE (sp?) ZONE (the area in teh ground between the surface and th ewater table) down to the groundwater. The method for the infiltration depends on the contaminant and its aquesous properties.
+
+Remedial techniques can include micorbiological methods and chemical methods
+
+LNAPL are substances taht will stay at the top of the water table while DNAPL contaminants will "sink" to the bottom of the water table zone (i.e. to the bedrock).
+
+
+Once these LNAPL and DNAPL substances are in the groundwater, they MOVE. This transport of the contaminants is what makes them potentially consequential to downstream communities that use the ground water as a potable source. 
+
+
+-----------------------------------------------------  Surface
+    |                                  ___
+    |                                  \ /
+- - - - - - - - - - - - - - - - - - - - - - - - - - -  Water table 
+    
+
+-----------------------------------------------------  Bedrock
+
+
+# Lecture 6 - 4/18/2019
+
+Coal Ash - Contains both organic and inorganic wastes. Two of the most important contaminants is Uranium and Thorium. 
+
+Coal Ash could potentially be creating a Radon gas emission when they decompose.
+
+Polonium is one of the major concerns. It is the breakdown product of Radon. 
+
+Every coal fired power plant in the world has large amounts of coal ash. Historically it was not regulated but now it is included under RCRA subtitle D. The coal ash is highly concentrated with readioactive contaminants since that is the nature of combustion products. When radioactive contaminatns sit there, they decay. This creates Radon gas which is very mobile. This further decays into Polonium which is extremely toxic. The Polonium further degrades into Lead. 
+
+This is another emergning issue in groundwater remediation. 
+
