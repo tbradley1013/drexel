@@ -1,3 +1,11 @@
+#===============================================================================
+# Querying the USGS data to add to the map 
+# 
+# Tyler Bradley 
+# 2019-10-28
+#===============================================================================
+
+
 library(tidyverse)
 library(dataRetrieval)
 
@@ -47,4 +55,5 @@ all_gw_sites <- stateCd$STUSAB %>%
 
 
 write_csv(active_gw_sites, "../drexel/enve555/data/active-gw-sites.csv")
+# this data set is very large and cannot be committed to github
 write_csv(all_gw_sites, "../drexel/enve555/data/all-gw-sites.csv")
